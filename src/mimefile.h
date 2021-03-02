@@ -27,6 +27,7 @@
 class SMTP_EXPORT MimeFile : public MimePart
 {
     Q_OBJECT
+
 public:
 
     /* [1] Constructors and Destructors */
