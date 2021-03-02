@@ -32,95 +32,91 @@ public:
 
     /* [0] Enumerations */
 
-    enum AuthMethod
-    {
-        AuthPlain,
-        AuthLogin
-    };
+enum AuthMethod
+{
+    AuthNone,
+    AuthPlain,
+    AuthLogin
+};
 
-    enum SmtpError
-    {
-        ConnectionTimeoutError,
-        ResponseTimeoutError,
-        SendDataTimeoutError,
-        AuthenticationFailedError,
-        ServerError,    // 4xx smtp error
-        ClientError     // 5xx smtp error
-    };
+enum SmtpError
+{
+    ConnectionTimeoutError,
+    ResponseTimeoutError,
+    SendDataTimeoutError,
+    AuthenticationFailedError,
+    ServerError, // 4xx smtp error
+    ClientError  // 5xx smtp error
+};
 
-    enum ConnectionType
-    {
-        TcpConnection,
-        SslConnection,
-        TlsConnection       // STARTTLS
-    };
+enum ConnectionType
+{
+    TcpConnection,
+    SslConnection,
+    TlsConnection // STARTTLS
+};
 
-    /* [0] --- */
+/* [0] --- */
 
+/* [1] Constructors and Destructors */
 
-    /* [1] Constructors and Destructors */
+SmtpClient( const QString& host = "localhost", int port = 25, ConnectionType ct = TcpConnection );
 
-    SmtpClient(const QString & host = "localhost", int port = 25, ConnectionType ct = TcpConnection);
+~SmtpClient();
 
-    ~SmtpClient();
+/* [1] --- */
 
-    /* [1] --- */
+/* [2] Getters and Setters */
 
+const QString& getHost() const;
+void           setHost( const QString& host );
 
-    /* [2] Getters and Setters */
+int  getPort() const;
+void setPort( int port );
 
-    const QString& getHost() const;
-    void setHost(const QString &host);
+const QString& getName() const;
+void           setName( const QString& name );
 
-    int getPort() const;
-    void setPort(int port);
+ConnectionType getConnectionType() const;
+void           setConnectionType( ConnectionType ct );
 
-    const QString& getName() const;
-    void setName(const QString &name);
+const QString& getUser() const;
+void           setUser( const QString& user );
 
-    ConnectionType getConnectionType() const;
-    void setConnectionType(ConnectionType ct);
+const QString& getPassword() const;
+void           setPassword( const QString& password );
 
-    const QString & getUser() const;
-    void setUser(const QString &user);
+SmtpClient::AuthMethod getAuthMethod() const;
+void                   setAuthMethod( AuthMethod method );
 
-    const QString & getPassword() const;
-    void setPassword(const QString &password);
+const QString& getResponseText() const;
+int            getResponseCode() const;
 
-    SmtpClient::AuthMethod getAuthMethod() const;
-    void setAuthMethod(AuthMethod method);
+int  getConnectionTimeout() const;
+void setConnectionTimeout( int msec );
 
-    const QString & getResponseText() const;
-    int getResponseCode() const;
+int  getResponseTimeout() const;
+void setResponseTimeout( int msec );
 
-    int getConnectionTimeout() const;
-    void setConnectionTimeout(int msec);
+int  getSendMessageTimeout() const;
+void setSendMessageTimeout( int msec );
 
-    int getResponseTimeout() const;
-    void setResponseTimeout(int msec);
-    
-    int getSendMessageTimeout() const;
-    void setSendMessageTimeout(int msec);
+QTcpSocket* getSocket();
 
-    QTcpSocket* getSocket();
+/* [2] --- */
 
+/* [3] Public methods */
 
-    /* [2] --- */
+bool connectToHost();
 
+bool login();
+bool login( const QString& user, const QString& password, AuthMethod method = AuthLogin );
 
-    /* [3] Public methods */
+bool sendMail( MimeMessage& email );
 
-    bool connectToHost();
+void quit();
 
-    bool login();
-    bool login(const QString &user, const QString &password, AuthMethod method = AuthLogin);
-
-    bool sendMail(MimeMessage& email);
-
-    void quit();
-
-
-    /* [3] --- */
+/* [3] --- */
 
 protected:
 
